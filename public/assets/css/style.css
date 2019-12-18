@@ -1,0 +1,28 @@
+.jumbotron {
+    background-image: url("../images/dnahelix.jpg");
+    background-size: cover;
+    text-align: center;
+}
+
+.headersContainer {
+    background-color: rgb(51, 133, 166,0.75);
+    width: 55%;
+    display: inline-block;
+}
+
+body {
+    background-color: #3385A6;
+    color: #A7E4F2;
+}
+
+h1, h3 {
+    width: 100%;
+}
+
+nav .navbar-nav li a{
+    color: #A7E4F2 !important;
+    }
+
+nav .navbar-brand {
+    color: #A7E4F2 !important;
+}
