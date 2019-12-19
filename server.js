@@ -44,25 +44,40 @@ app.get("/scrape", function(req, res) {
       var $ = cheerio.load(response.data);
   
       // Now, we grab every h2 within an article tag, and do the following:
-      $(".content").each(function(i, element) {
+      $("div p").each(function(i, element) {
         // Save an empty result object
+       
         var result = {};
-        
-        console.log($(this))
+    
         // Add the text and href of every link, and save them as properties of the result object
-        // result.title = $(this).children("a").text();
-        // result.link = $(this).children("a").attr("href");
+            
+            result.title = $(this).parent().children("h3").children("a").text().trim();
+            result.link = $(this).parent().children("h3").children("a").attr("href");
+            result.summary = $(this).text().trim();
+
+
+        console.log(result)
   
-        // // Create a new Article using the `result` object built from scraping
-        // db.Article.create(result)
-        //   .then(function(dbArticle) {
-        //     // View the added result in the console
-        //     console.log(dbArticle);
-        //   })
-        //   .catch(function(err) {
-        //     // If an error occurred, log it
-        //     console.log(err);
-        //   });
+        // Create a new Article using the `result` object built from scraping
+
+        if(result.title !== '') {
+            db.Article.remove()
+            .then(function() {
+           
+                db.Article.create(result)
+                .then(function(dbArticle) {
+                // View the added result in the console
+                console.log(dbArticle);
+                })
+                .catch(function(err) {
+                // If an error occurred, log it
+                console.log(err);
+                });
+            })
+
+        }
+       
+
       });
   
       // Send a message to the client
@@ -73,8 +88,20 @@ app.get("/scrape", function(req, res) {
 // Routes
 
 app.get("/", function(req,res) {
-    res.render("index");
-})
+
+    db.Article.find({})
+    .then(function(dbArticles) {
+        console.log(dbArticles)
+        let hbsObject = {
+            articles: dbArticles
+        }
+        res.render("index",hbsObject);
+    })
+    .catch(function(err) {
+        res.json(err);
+    });
+    
+});
 
 app.get("/saved", function(req,res) {
     res.render("savedarticles");

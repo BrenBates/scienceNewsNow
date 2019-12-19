@@ -26,3 +26,21 @@ nav .navbar-nav li a{
 nav .navbar-brand {
     color: #A7E4F2 !important;
 }
+
+.card {
+    margin-bottom: 1.5%;
+}
+
+.card-header {
+    background-color: #011826;
+}
+
+.card-body {
+    background-color: #024059;
+}
+
+a { 
+    text-decoration:none;
+    vertical-align: middle;
+    color: #3385A6;
+}

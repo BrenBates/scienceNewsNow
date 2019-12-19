@@ -4,3 +4,25 @@
         <h3>Science News Edition</h3>
     </div>
 </div>
+
+  {{#each articles}}
+
+
+    <div class="card py-0" style="width: 100%">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-10">
+                    <h5 class="card-title"><a href="{{link}}">{{title}}</a></h5>
+                </div>
+                <div class="col-md-2">
+                        <a href="#" class="btn btn-info savebtn" data-id={{_id}}>SAVE ARTICLE</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+        
+            <p class="card-text">{{summary}}</p>
+        </div>
+    </div>
+    
+  {{/each}}
