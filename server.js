@@ -35,11 +35,17 @@ app.set("view engine", "handlebars");
 
 // If deployed, use the deployed database.  Otherwise use the local host
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scienceNews"
+// const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scienceNews"
 
 // , { useNewUrlParser: true }
 // Connect to the Mongo DB
-mongoose.connect(MONGODB_URI);
+mongoose.connect(
+    process.env.MONGODB_URI ||
+    "mongodb://user:password1@ds149593.mlab.com:49593/heroku_xh5tsl9m",
+    {
+        useMongoClient: true
+    }
+    );
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
