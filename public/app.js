@@ -60,7 +60,10 @@ $(".noteBtn").on("click", function() {
   $("#notesTitle").empty()
   $("#notesBody").empty()
   let thisId = $(this).attr("data-id")
-  console.log("Article id: " + thisId)
+  
+  // copy the id over to the data id attribute for the modal save note button for use on that button click
+  $("#saveNoteBtn").attr("data-id",thisId)
+
 
    // Now make an ajax call for the Article
    $.ajax({
@@ -69,12 +72,40 @@ $(".noteBtn").on("click", function() {
   })
     // With that done, add the note information to the page
     .then(function(data) {
+      console.log('this is the data')
       console.log(data)
-      $("#notesTitle").append("<h5>" + data.title + "</h5>")
+
+      $("#notesTitle").append('Note for article: ' + data._id);
+      $("#notesBody").append(data.note.noteBody);
     })
 
 })
 
+$("#saveNoteBtn").on("click", function() {
+
+   // Grab the id associated with the article from the submit button
+   var thisId = $(this).attr("data-id");
+   console.log(thisId)
+   console.log($("#notesInput").val().trim())
+
+   // Run a POST request to change the note, using what's entered in the inputs
+   $.ajax({
+     method: "POST",
+     url: "/notes/" + thisId,
+     data: {
+       // Value taken from title input
+       noteBody: $("#notesInput").val().trim()
+     }
+   })
+     // With that done
+     .then(function(data) {
+       // Log the response
+       console.log(data);
+       // Empty the notes section
+       $("#notesInput").val('');
+     });
+ 
+})
 
 $(".deleteBtn").on("click", function() {
   event.preventDefault();

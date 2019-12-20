@@ -105,7 +105,7 @@ app.get("/", function(req,res) {
 app.get("/saved", function(req,res) {
     db.savedArticle.find({})
     .then(function(dbSavedArticles) {
-        console.log(dbSavedArticles)
+       
         let hbsObject = {
             savedArticles: dbSavedArticles
         }
@@ -131,12 +131,47 @@ app.get("/clearallsaved", function(req,res) {
     });
 })
 
+// Get route for notes.  When the user clicks on the note button for a saved article this will trigger.
 app.get("/notes/:id", function(req,res) {
-    console.log(req.params.id)
+     console.log(req.params.id)
+    db.savedArticle.findOne({
+        _id: req.params.id
+    })
+     .populate("note")
+    .then(function(dbArticle) {
+        console.log(dbArticle)
+        res.send(dbArticle)
+        // res.json(dbArticle)
+    })
+    .catch(function(err) {
+        res.json(err);
+    });
+
+});
+
+// Post route for adding a new note.  When the user clicks to save a new note in the notes modal this will trigger.
+app.post("/notes/:id", function(req,res) {
+
+   db.Note.create(req.body)
+    .then(function(dbNote) {
+        console.log('this is the new note', dbNote)
+        return db.savedArticle.findOneAndUpdate(
+            {_id: req.params.id},
+            {note:dbNote._id},
+            {new:true}
+        );
+    })
+    .then(function(dbSavedArticle) {
+        console.log('this is the saved article', dbSavedArticle)
+        res.json(dbSavedArticle);
+    })
+    .catch(function(err) {
+        res.json(err);
+    })
 
 })
+
 app.get("/savearticle/:id", function(req,res) {
-    console.log(req.params.id)
 
     db.Article.findOne({
         _id: req.params.id
@@ -161,7 +196,6 @@ app.get("/savearticle/:id", function(req,res) {
 });
 
 app.get("/deletearticle/:id", function(req,res) {
-    console.log(req.params.id)
 
     db.Article.deleteOne({
         _id: req.params.id
@@ -174,7 +208,6 @@ app.get("/deletearticle/:id", function(req,res) {
 });
 
 app.get("/deletesavedarticle/:id", function(req,res) {
-    console.log(req.params.id)
 
     db.savedArticle.deleteOne({
         _id: req.params.id
