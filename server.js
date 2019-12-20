@@ -33,8 +33,11 @@ app.use(express.static("public"));
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+// If deployed, use the deployed database.  Otherwise use the local host
+
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scienceNews"
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/scienceNews", { useNewUrlParser: true });
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
