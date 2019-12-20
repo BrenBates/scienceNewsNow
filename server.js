@@ -12,7 +12,7 @@ var cheerio = require("cheerio");
 // Require all models
 var db = require("./models");
 
-var PORT = 3000;
+
 
 // Initialize Express
 var app = express();
@@ -33,17 +33,19 @@ app.use(express.static("public"));
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+var PORT = process.env.PORT || 3000;
+
 // If deployed, use the deployed database.  Otherwise use the local host
 
 // const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scienceNews"
 
-// , { useNewUrlParser: true }
+// , 
 // Connect to the Mongo DB
 mongoose.connect(
     process.env.MONGODB_URI ||
     "mongodb://user:password1@ds149593.mlab.com:49593/heroku_xh5tsl9m",
     {
-        useMongoClient: true
+        useNewUrlParser: true 
     }
     );
 
