@@ -1,6 +1,42 @@
+
+{{!-- Bring in the bottom half of the nav bar so we can add clear articles and clear saved articles buttons --}}
+<button id = "clearSavedArticlesBtn" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Clear All Saved Articles</button>
+ </form>
+        </li>
+      </ul>
+
+    </div>
+  </nav>
+
+
 <div class="jumbotron">
     <div class="headersContainer">
         <h1 class="display-4">Saved Articles</h1>
         <h3>Your Saved Articles</h3>
     </div>
 </div>
+
+
+{{#each savedArticles}}
+
+
+    <div class="card py-0" style="width: 100%">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-10">
+                    <h5 class="card-title"><a href={{link}}>{{title}}</a></h5>
+                </div>
+                <div class="col-md-2">
+                        <a href="#" class="deleteBtn btn btn-danger" data-id={{_id}}>DELETE</a>
+                        <a href="#" class="noteBtn btn btn-warning" data-id={{_id}} data-toggle="modal" data-target="#notesModal">NOTES</a>
+                </div>
+            
+            </div>
+        </div>
+        <div class="card-body">
+        
+            <p class="card-text">{{summary}}</p>
+        </div>
+    </div>
+
+    {{/each}}

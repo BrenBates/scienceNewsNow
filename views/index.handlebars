@@ -1,3 +1,16 @@
+ {{!-- Bring in the bottom half of the nav bar so we can add clear articles and clear saved articles buttons --}}
+  <button id = "scrapeBtn" class="btn btn-outline-info my-2 my-sm-0"  type="submit">Scrape New Articles</button>
+  {{!-- data-toggle="modal" data-target="#scrapeModal" --}}
+ <button id = "clearArticlesBtn" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Clear All Articles</button>
+ </form>
+        </li>
+      </ul>
+
+    </div>
+  </nav>
+
+
+
 <div class="jumbotron">
     <div class="headersContainer">
         <h1 class="display-4">Mongo Scraper</h1>
@@ -7,15 +20,14 @@
 
   {{#each articles}}
 
-
     <div class="card py-0" style="width: 100%">
         <div class="card-header">
             <div class="row">
                 <div class="col-md-10">
-                    <h5 class="card-title"><a href="{{link}}">{{title}}</a></h5>
+                    <h5 class="card-title"><a href={{link}}>{{title}}</a></h5>
                 </div>
                 <div class="col-md-2">
-                        <a href="#" class="btn btn-info savebtn" data-id={{_id}}>SAVE ARTICLE</a>
+                        <a href="#" class="saveBtn btn btn-info" data-id={{_id}} data-toggle="modal" data-target="#saveModal">SAVE ARTICLE</a>
                 </div>
             </div>
         </div>

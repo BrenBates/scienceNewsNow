@@ -12,11 +12,12 @@
 
 body {
     background-color: #3385A6;
-    color: #A7E4F2;
+    color: #A7E4F2 !important;
 }
 
 h1, h3 {
     width: 100%;
+    color: #A7E4F2;
 }
 
 nav .navbar-nav li a{
@@ -29,6 +30,7 @@ nav .navbar-brand {
 
 .card {
     margin-bottom: 1.5%;
+    border-color:#A7E4F2;
 }
 
 .card-header {
@@ -43,4 +45,31 @@ a {
     text-decoration:none;
     vertical-align: middle;
     color: #3385A6;
+}
+
+.btn {
+    border-color: #A7E4F2 !important;
+    color: #A7E4F2 !important;
+}
+.btn-warning, .btn-warning:hover, .btn-warning:active, .btn-warning:visited {
+    background-color: #3385A6 !important;
+    transition: none !important;
+}
+
+.btn-danger, .btn-danger:hover, .btn-danger:active, .btn-danger:visited {
+    background-color: #024059 !important;
+    transition: none !important;
+}
+
+.noteBtn, .deleteBtn {
+    float: right;
+    margin-right: 3%;
+    /* width:49%;
+    font-size: 10px; */
+}
+
+.modal-footer,.modal-body, .modal-header {
+    background-color: #024059;
+    text-align: center;
+    border-color:#A7E4F2;
 }

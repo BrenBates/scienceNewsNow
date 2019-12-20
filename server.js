@@ -42,32 +42,32 @@ app.get("/scrape", function(req, res) {
     axios.get("https://www.sciencenews.org/all-stories").then(function(response) {
       // Then, we load that into cheerio and save it to $ for a shorthand selector
       var $ = cheerio.load(response.data);
-  
+
+    let articleCount = 0;
+    
       // Now, we grab every h2 within an article tag, and do the following:
       $("div p").each(function(i, element) {
         // Save an empty result object
        
-        var result = {};
+        let result = {};
     
         // Add the text and href of every link, and save them as properties of the result object
             
             result.title = $(this).parent().children("h3").children("a").text().trim();
             result.link = $(this).parent().children("h3").children("a").attr("href");
             result.summary = $(this).text().trim();
-
-
-        console.log(result)
-  
+        
         // Create a new Article using the `result` object built from scraping
 
         if(result.title !== '') {
-            db.Article.remove()
+             db.Article.remove()
             .then(function() {
            
                 db.Article.create(result)
                 .then(function(dbArticle) {
-                // View the added result in the console
-                console.log(dbArticle);
+                //toggle the article count 
+                articleCount++;
+               
                 })
                 .catch(function(err) {
                 // If an error occurred, log it
@@ -78,10 +78,10 @@ app.get("/scrape", function(req, res) {
         }
        
 
-      });
+      })
   
       // Send a message to the client
-      res.send("Scrape Complete");
+      res.sendStatus(200);
     });
   });
 
@@ -91,7 +91,6 @@ app.get("/", function(req,res) {
 
     db.Article.find({})
     .then(function(dbArticles) {
-        console.log(dbArticles)
         let hbsObject = {
             articles: dbArticles
         }
@@ -104,8 +103,88 @@ app.get("/", function(req,res) {
 });
 
 app.get("/saved", function(req,res) {
-    res.render("savedarticles");
+    db.savedArticle.find({})
+    .then(function(dbSavedArticles) {
+        console.log(dbSavedArticles)
+        let hbsObject = {
+            savedArticles: dbSavedArticles
+        }
+        res.render("savedarticles",hbsObject);
+    })
+    .catch(function(err) {
+        res.json(err);
+    });
+
 })
+
+app.get("/clearall", function(req,res) {
+    db.Article.remove()
+    .catch(function(err) {
+        res.json(err);
+    });
+})
+
+app.get("/clearallsaved", function(req,res) {
+    db.savedArticle.remove()
+    .catch(function(err) {
+        res.json(err);
+    });
+})
+
+app.get("/notes/:id", function(req,res) {
+    console.log(req.params.id)
+
+})
+app.get("/savearticle/:id", function(req,res) {
+    console.log(req.params.id)
+
+    db.Article.findOne({
+        _id: req.params.id
+    }).then(function(dbArticle) {
+        var saveResult = {};
+
+        saveResult.title = dbArticle.title
+        saveResult.link = dbArticle.link
+        saveResult.summary = dbArticle.summary
+        
+        db.savedArticle.create(saveResult).then(function(dbSaved) {
+            console.log('save success')
+            res.sendStatus(200);
+        })
+        .catch(function(err) {
+            res.json(err);
+        });
+        })
+        .catch(function(err) {
+            res.json(err);
+        });
+});
+
+app.get("/deletearticle/:id", function(req,res) {
+    console.log(req.params.id)
+
+    db.Article.deleteOne({
+        _id: req.params.id
+    }).then(function(dbDeletedArticle) {
+       console.log('deleted',dbDeletedArticle)
+        })
+        .catch(function(err) {
+            res.json(err);
+        });
+});
+
+app.get("/deletesavedarticle/:id", function(req,res) {
+    console.log(req.params.id)
+
+    db.savedArticle.deleteOne({
+        _id: req.params.id
+    }).then(function(dbDeletedArticle) {
+       console.log('deleted',dbDeletedArticle)
+        })
+        .catch(function(err) {
+            res.json(err);
+        });
+});
 
 
 // Start the server
